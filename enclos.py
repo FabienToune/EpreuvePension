@@ -21,10 +21,14 @@ class Enclos:
         #   - capacité, année : entiers, bornes exactes dans les tests.
         # Distinguer TypeError (mauvais type) et ValueError (mauvaise valeur).
         # À la création, l'enclos est libre.
-        if not isinstance(nom, str) or not nom.strip():
+        if not isinstance(nom, str):
             raise TypeError("Le nom doit etre une chaine de caractere")
-        if not isinstance (secteur, str) or not secteur.strip():
+        if not nom.strip():
+            raise ValueError("Le nom ne peut pas être vide")
+        if not isinstance (secteur, str):
             raise TypeError("Le secteur doit etre une chaine de caractere")
+        if not secteur.strip():
+            raise ValueError("Le secteur ne peut pas être vide")
         if not Enclos.code_valide(code_enclos):
             raise ValueError(
                 "Le code doit être une chaine alphanumerique de 17 caractere"
@@ -321,6 +325,6 @@ class BassinAquatique(Enclos):
         return (
             f"Enclos(nom={self._nom!r}, secteur={self._secteur!r}, "
             f"code_enclos={self._code_enclos!r}, capacite_animaux={self._capacite_animaux},"
-            f"annee_construction={self._annee_construction}), volume_m3{self._volume_m3!r}"
+            f"annee_construction={self._annee_construction}), volume_m3{self._volume_m3:.1f}"
         )
         
