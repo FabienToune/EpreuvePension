@@ -264,31 +264,63 @@ class BassinAquatique(Enclos):
                  annee_construction, volume_m3):
         # Déléguer au parent, puis valider l'attribut propre (volume :
         # nombre strictement positif, stocké en float).
-        ...
+        super().__init__(nom, secteur, code_enclos, capacite_animaux,
+                         annee_construction)
+
+        if isinstance(volume_m3, bool):
+            raise TypeError("le volume doit etre un chiffre")
+        if volume_m3 <= 0: 
+            raise ValueError("Le volume doit etre positif")
+
+        self._volume_m3 = float(volume_m3)
 
     @property
     def volume_m3(self):
-        ...
+        return self._volume_m3
 
     @classmethod
     def depuis_csv(cls, ligne):
-        ...
+        champs = ligne.split(";")
+        if len(champs) != 6:
+            raise ValueError(
+                "La ligne doit contenir exactement 6 champs séparés "
+                "par des points-virgules."
+            )
+        nom, secteur, code_enclos, capacite_animaux, annee_construction, volume_m3 = champs
+        return cls(nom, secteur, code_enclos, int(capacite_animaux), int(annee_construction), float(volume_m3))
 
     def to_dict(self):
-        ...
+        donnees = super().to_dict()
+        donnees["type"] = "BassinAquatique"
+        donnees ["volume_m3"] = self._volume_m3
+        return donnees
 
     @classmethod
     def from_dict(cls, donnees):
-        ...
+        bassinAquatique = cls(
+            donnees["nom"],
+            donnees["secteur"],
+            donnees["code_enclos"],
+            donnees["capacite_animaux"],
+            donnees["annee_construction"],
+            donnees["volume_m3"],
+        )
+        BassinAquatique._restaurer_etat(bassinAquatique, donnees)
+        return bassinAquatique
 
     def fiche_resume(self):
         # Ici la mesure pertinente n'est PAS le nombre d'animaux : on ne
         # réutilise donc PAS la fiche de base (REMPLACEMENT). Format exact :
         # voir les tests.
-        ...
+        return f"{self._volume_m3:.1f} de bassin"
 
     def __str__(self):
-        ...
+        return f"{super().__str__()} [{self._volume_m3}]"
 
     def __repr__(self):
-        ...
+        return (
+            f"Enclos(nom={self._nom!r}, secteur={self._secteur!r}, "
+            f"code_enclos={self._code_enclos!r}, capacite_animaux={self._capacite_animaux},"
+            f"annee_construction={self._annee_construction}), volume_m3={self._volume_m3}"
+        )
+        
