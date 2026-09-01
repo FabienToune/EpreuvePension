@@ -252,7 +252,7 @@ class EnclosChauffe(Enclos):
         return (
             f"Enclos(nom={self._nom!r}, secteur={self._secteur!r}, "
             f"code_enclos={self._code_enclos!r}, capacite_animaux={self._capacite_animaux},"
-            f"annee_construction={self._annee_construction}), nombre_abris={self._nombre_abris}"
+            f"annee_construction={self._annee_construction}), nombre_abris{self._nombre_abris}"
         )
 
 
@@ -312,7 +312,7 @@ class BassinAquatique(Enclos):
         # Ici la mesure pertinente n'est PAS le nombre d'animaux : on ne
         # réutilise donc PAS la fiche de base (REMPLACEMENT). Format exact :
         # voir les tests.
-        return f"{self._volume_m3:.1f} de bassin"
+        return f"{self._volume_m3:.1f} m³ de bassin"
 
     def __str__(self):
         return f"{super().__str__()} [{self._volume_m3}]"
@@ -321,6 +321,6 @@ class BassinAquatique(Enclos):
         return (
             f"Enclos(nom={self._nom!r}, secteur={self._secteur!r}, "
             f"code_enclos={self._code_enclos!r}, capacite_animaux={self._capacite_animaux},"
-            f"annee_construction={self._annee_construction}), volume_m3={self._volume_m3}"
+            f"annee_construction={self._annee_construction}), volume_m3{self._volume_m3!r}"
         )
         
