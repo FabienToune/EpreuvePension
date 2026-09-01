@@ -254,10 +254,9 @@ class EnclosChauffe(Enclos):
 
     def __repr__(self):
         return (
-            f"Enclos(nom={self._nom!r}, secteur={self._secteur!r}, "
+            f"EnclosChauffe(nom={self._nom!r}, secteur={self._secteur!r}, "
             f"code_enclos={self._code_enclos!r}, capacite_animaux={self._capacite_animaux},"
-            f"annee_construction={self._annee_construction}), nombre_abris{self._nombre_abris}"
-        )
+            f"annee_construction={self._annee_construction}, nombre_abris={self._nombre_abris})")
 
 
 class BassinAquatique(Enclos):
@@ -323,8 +322,7 @@ class BassinAquatique(Enclos):
 
     def __repr__(self):
         return (
-            f"Enclos(nom={self._nom!r}, secteur={self._secteur!r}, "
+            f"BassinAquatique(nom={self._nom!r}, secteur={self._secteur!r}, "
             f"code_enclos={self._code_enclos!r}, capacite_animaux={self._capacite_animaux},"
-            f"annee_construction={self._annee_construction}), volume_m3{self._volume_m3:.1f}"
-        )
+            f"annee_construction={self._annee_construction}, volume_m3={self._volume_m3!r})")
         
