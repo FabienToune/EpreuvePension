@@ -18,15 +18,26 @@ from enclos import Enclos, EnclosChauffe, BassinAquatique
 # principe ouvert/fermé : ajouter un type = une ligne ici, sans toucher
 # à la fabrique (vs une cascade if/elif à éditer en son cœur).
 _FABRIQUES = {
-    ...
+    "Enclos": Enclos,
+    "EnclosChauffe": EnclosChauffe,
+    "BassinAquatique": BassinAquatique,
+
 }
+
 
 
 def enclos_depuis_dict(donnees):
     # Lire le champ « type », choisir la classe dans le registre, puis
     # déléguer à sa classmethod from_dict. Type absent ou inconnu -> erreur.
     # Même rôle que livre_depuis_dict.
-    ...
+    type_enclos = donnees.get("type")
+
+    if type_enclos not in _FABRIQUES:
+        raise ValueError()
+
+    classe = _FABRIQUES[type_enclos]
+
+    return classe.from_dict(donnees)
 
 
 # --- Persistance JSON ---
@@ -34,10 +45,25 @@ def enclos_depuis_dict(donnees):
 def sauvegarder_parc_json(enclos, chemin):
     # Transformer chaque enclos par SON to_dict (dispatch polymorphe,
     # sans test de type), puis écrire la liste de dicts en JSON.
-    ...
+    donnees = []
+    for enclos in enclos:
+        donnees.append(enclos.to_dict())
+
+    with open(chemin, "w", encoding="utf-8") as fichier:
+        json.dump(donnees, fichier)
 
 
 def charger_parc_json(chemin):
     # Relire le JSON et confier chaque dict à la fabrique, qui restitue le
     # type exact d'origine. Un parc mélangé revient à l'identique.
-    ...
+    with open(chemin, encoding="utf-8") as fichier:
+        donnees = json.load(fichier)
+
+    resultat = []
+
+    for d in donnees:
+        resultat.append(
+            enclos_depuis_dict(d)
+        )
+
+    return resultat 
