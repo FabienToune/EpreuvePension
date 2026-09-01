@@ -192,37 +192,68 @@ class EnclosChauffe(Enclos):
                  annee_construction, nombre_abris):
         # Déléguer la validation héritée au parent, puis valider l'attribut
         # propre (nombre d'abris : entier strictement positif).
-        ...
+        super().__init__(nom, secteur, code_enclos, capacite_animaux,
+                        annee_construction)
+
+        if not isinstance(nombre_abris, int) or isinstance(nombre_abris,bool):
+            raise TypeError("Le nombre d'abris doit etre un entier")
+        if nombre_abris <= 0:
+            raise ValueError("Le nombre d'abris est un entier positif")
+
+        self._nombre_abris = nombre_abris
 
     @property
     def nombre_abris(self):
-        ...
+        return self._nombre_abris
 
     @classmethod
     def depuis_csv(cls, ligne):
         # Comme Enclos.depuis_csv, mais un champ de plus (les abris).
-        ...
+        champs = ligne.split(";")
+        if len(champs) != 6:
+            raise ValueError(
+                "La ligne doit contenir exactement 6 champs séparés "
+                "par des points-virgules."
+            )
+        nom, secteur, code_enclos, capacite_animaux, annee_construction, nombre_abris = champs
+        return cls(nom, secteur, code_enclos, int(capacite_animaux), int(annee_construction), int(nombre_abris))
 
     def to_dict(self):
         # ENRICHIR le dictionnaire hérité du parent (ne pas le réécrire) :
         # corriger « type » et ajouter l'attribut propre. (Geste de
         # LivreNumerique.to_dict.)
-        ...
+        donnees = super().to_dict()
+        donnees["type"] = "EnclosChauffe"
+        donnees["nombre_abris"] = self._nombre_abris
+        return donnees
 
     @classmethod
     def from_dict(cls, donnees):
-        ...
+        enclosChauffe = cls(
+            donnees["nom"],
+            donnees["secteur"],
+            donnees["code_enclos"],
+            donnees["capacite_animaux"],
+            donnees["annee_construction"],
+            donnees["nombre_abris"],
+        )
+        EnclosChauffe._restaurer_etat(enclosChauffe, donnees)
+        return enclosChauffe
 
     def fiche_resume(self):
         # On REPREND la fiche de base et on la complète : la capacité reste
         # un préfixe (ENRICHISSEMENT). Format exact : voir les tests.
-        ...
+        return f"{self._capacite_animaux} animaux [enclos chauffé, {self._nombre_abris} abris]"
 
     def __str__(self):
-        ...
+        return f"{super().__str__()} [{self._nombre_abris}]"
 
     def __repr__(self):
-        ...
+        return (
+            f"Enclos(nom={self._nom!r}, secteur={self._secteur!r}, "
+            f"code_enclos={self._code_enclos!r}, capacite_animaux={self._capacite_animaux},"
+            f"annee_construction={self._annee_construction}), nombre_abris={self._nombre_abris}"
+        )
 
 
 class BassinAquatique(Enclos):
