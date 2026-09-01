@@ -158,7 +158,7 @@ class Enclos:
     # --- Représentations ---
 
     def __str__(self):
-        etat = "libre" if self._libre else "occupe"
+        etat = "libre" if self._libre else "occupé"
         return(
             f"{self._nom} de {self._secteur} {self._annee_construction}"
             f"{self._capacite_animaux} animaux - {etat}"
