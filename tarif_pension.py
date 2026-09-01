@@ -1,38 +1,21 @@
-# tarif_pension.py - À COMPLÉTER
+# tarif_pension.py - À COMPLÉTER (épreuve pension)
 #
-# Ce fichier contient l'objet-valeur TarifPension : un montant associé à
-# une devise (par exemple 85.50 EUR).
-#
-# La différence avec un enclos est importante :
-#   - un enclos a une IDENTITÉ (son code) : deux enclos de même
-#     code sont « le même » ;
-#   - un tarif est un OBJET-VALEUR : ce qui compte est sa VALEUR. Deux
-#     tarifs de même montant et même devise sont égaux, point.
-#
-# Comme les nombres, un tarif a un ordre naturel : on peut dire qu'un
-# tarif est « plus petit » qu'un autre. Le décorateur @total_ordering
-# (déjà placé) fabrique <=, >, >= automatiquement à partir de __eq__ et
-# __lt__ : vous n'avez donc que ces deux comparaisons à écrire.
-#
-# Comme toujours, les tests (test_tarif_pension.py) font foi.
+# Objet-valeur TarifPension, à transposer de l'objet-valeur Argent (S11).
+# Pour cette épreuve, aucune docstring n'est demandée : les indices «#»
+# donnent le ROLE, et les tests (test_tarif_pension.py) fixent les
+# valeurs exactes, l'ordre et les exceptions. Complétez les corps « ... ».
 
 from functools import total_ordering
 
 
 @total_ordering
 class TarifPension:
-    """Un montant par jour de pension, dans une devise donnée.
-
-    Objet-valeur immuable.
-    """
+    # Objet-valeur IMMUABLE : l'égalité ET l'ordre portent sur la VALEUR
+    # (montant + devise), pas sur l'identité mémoire. C'est le contraste
+    # avec Enclos, qui est une entité (identité par code).
 
     def __init__(self, montant, devise="EUR"):
-        # Valider puis ranger le montant et la devise.
-        #   - montant : un nombre (entier ou réel, mais PAS un booléen) ;
-        #     mauvais type -> TypeError. Il doit être positif ou nul ;
-        #     une valeur négative -> ValueError. Le ranger sous forme de
-        #     nombre réel (float).
-        #   - devise : la chaîne de la devise (valeur par défaut "EUR").
+        # Refuser un montant strictement négatif ; stocker le montant en float.
         ...
 
     @property
@@ -44,35 +27,29 @@ class TarifPension:
         ...
 
     def __eq__(self, autre):
-        # Deux tarifs sont égaux s'ils ont le MÊME montant ET la MÊME
-        # devise. Si « autre » n'est pas un TarifPension, renvoyer
-        # NotImplemented.
+        # Égalité de valeur : même montant ET même devise.
+        # Renvoyer NotImplemented si « autre » n'est pas un TarifPension.
         ...
 
     def __hash__(self):
-        # Cohérent avec __eq__ : fondé sur le couple (montant, devise).
+        # Cohérent avec __eq__ : hacher le couple (montant, devise).
         ...
 
     def __lt__(self, autre):
-        # Comparer deux tarifs (« plus petit que »). La comparaison n'a de
-        # sens qu'entre MÊMES devises : si les devises diffèrent, lever
-        # ValueError. Si « autre » n'est pas un TarifPension, renvoyer
-        # NotImplemented.
+        # Comparer deux TarifPension de MÊME devise ; devises différentes
+        # -> erreur. Comme Argent : __lt__ + @total_ordering suffisent à
+        # dériver tout le reste de l'ordre (<=, >, >=).
         ...
 
     def __add__(self, autre):
-        # Additionner deux tarifs de MÊME devise et renvoyer un NOUVEAU
-        # TarifPension (sans modifier les deux opérandes). Devises
-        # différentes -> ValueError. Si « autre » n'est pas un TarifPension,
-        # renvoyer NotImplemented (additionner un tarif et un simple nombre
-        # doit échouer, pas réussir en silence).
+        # Additionner deux TarifPension de MÊME devise -> un NOUVEAU
+        # TarifPension. NotImplemented si « autre » n'est pas un
+        # TarifPension (l'addition avec un nombre doit échouer, pas
+        # réussir silencieusement).
         ...
 
     def __str__(self):
-        # Texte lisible, par exemple « 85.50 EUR » (deux décimales).
-        # Format exact donné par les tests.
         ...
 
     def __repr__(self):
-        # Texte reconstructible, par exemple TarifPension(85.5, 'EUR').
         ...

@@ -1,57 +1,43 @@
-# persistance.py - À COMPLÉTER
+# persistance.py - À COMPLÉTER (épreuve pension)
 #
-# Ce fichier sait ENREGISTRER une parc dans un fichier JSON et la
-# RELIRE plus tard. Le point délicat : quand on relit le fichier, chaque
-# enclos doit retrouver son TYPE EXACT d'origine (un EnclosChauffe redevient
-# un EnclosChauffe, un BassinAquatique redevient un BassinAquatique).
-#
-# Pour cela, on s'appuie sur le champ "type" écrit par to_dict, et sur un
-# REGISTRE qui associe chaque nom de type à sa classe. Ajouter un nouveau
-# type d'enclos demain ne demandera qu'une ligne dans ce registre,
-# sans rien changer d'autre.
-#
-# Remarque : c'est ICI qu'on importe json et qu'on touche aux fichiers.
-# Le fichier enclos.py, lui, ne s'occupe JAMAIS de fichiers ni de
-# JSON : chaque fichier a son rôle.
-#
-# Les tests (test_persistance.py) font foi.
+# Persistance du parc, à transposer de catalogue_persistance (S18).
+# Les FONCTIONS de ce module orchestrent fichiers et format (JSON) ; ce
+# sont les CLASSES (to_dict / from_dict) qui connaissent leurs attributs.
+# Le module enclos, lui, n'importe pas json.
+# Aucune docstring demandée ; test_persistance.py fixe le comportement.
+# Complétez les corps « ... ».
 
 import json
 
 from enclos import Enclos, EnclosChauffe, BassinAquatique
 
 
-# Registre « nom de type -> classe ».
-# À COMPLÉTER : associez chaque valeur possible du champ "type" à la
-# classe correspondante.
+# Registre de reconstruction : associe le discriminateur « type » à la
+# classe. Le compléter est ce qui rend la reconstruction polymorphe
+# possible. Comme la fabrique du catalogue de livres, il illustre le
+# principe ouvert/fermé : ajouter un type = une ligne ici, sans toucher
+# à la fabrique (vs une cascade if/elif à éditer en son cœur).
 _FABRIQUES = {
     ...
 }
 
 
 def enclos_depuis_dict(donnees):
-    # À partir d'un dictionnaire (issu de to_dict), recréer le bon type
-    # d'enclos :
-    #   - lire le champ "type" ;
-    #   - si ce type est absent ou inconnu du registre -> ValueError ;
-    #   - sinon, déléguer la reconstruction à la méthode from_dict de la
-    #     classe trouvée dans le registre.
+    # Lire le champ « type », choisir la classe dans le registre, puis
+    # déléguer à sa classmethod from_dict. Type absent ou inconnu -> erreur.
+    # Même rôle que livre_depuis_dict.
     ...
 
 
-# ----------------------------------------------------------------------
-# Enregistrement et lecture au format JSON
-# ----------------------------------------------------------------------
+# --- Persistance JSON ---
 
 def sauvegarder_parc_json(enclos, chemin):
-    # Transformer chaque enclos en dictionnaire (chacun sait le faire
-    # via to_dict, sans qu'on ait à tester son type), puis écrire la liste
-    # obtenue dans le fichier « chemin » au format JSON.
+    # Transformer chaque enclos par SON to_dict (dispatch polymorphe,
+    # sans test de type), puis écrire la liste de dicts en JSON.
     ...
 
 
 def charger_parc_json(chemin):
-    # Lire le fichier JSON « chemin », puis reconstruire chaque enclos
-    # avec enclos_depuis_dict. Renvoyer la liste des enclos,
-    # chacun ayant retrouvé son type exact d'origine.
+    # Relire le JSON et confier chaque dict à la fabrique, qui restitue le
+    # type exact d'origine. Un parc mélangé revient à l'identique.
     ...
