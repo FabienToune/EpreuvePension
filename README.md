@@ -1,4 +1,4 @@
-# Test de fin de module — Pension et refuge pour animaux
+# Test de fin de module (seconde session) — Pension et refuge pour animaux
 
 ## Rappel : vous pouvez vous servir de vos notes de cours, de vos ateliers, et de toutes autres ressources *utilisées en classe* MAIS PAS : de votre téléphone, ni d'une IA.
 
